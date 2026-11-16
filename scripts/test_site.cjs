@@ -12,6 +12,7 @@ assert.doesNotMatch(html, /ICE.?REST|Every second night, mapped by team/);
 
 function createApp(data, ok = true) {
   const elements = new Map();
+  const dynamicElements = new Map();
   const requests = [];
   function element() {
     return {
@@ -21,11 +22,13 @@ function createApp(data, ok = true) {
       replaceChildren(...children) { this.children = children; },
       append(child) { this.children.push(child); },
       addEventListener(name, callback) { this[name] = callback; },
+      contains() { return true; },
     };
   }
   const context = {
     document: {
       getElementById(id) {
+        if (dynamicElements.has(id)) return dynamicElements.get(id);
         assert.match(html, new RegExp(`id="${id}"`), `Unknown element: ${id}`);
         if (!elements.has(id)) elements.set(id, element());
         return elements.get(id);
@@ -41,7 +44,7 @@ function createApp(data, ok = true) {
   };
   vm.createContext(context);
   vm.runInContext(script, context);
-  return { elements, requests, context };
+  return { elements, dynamicElements, requests, context };
 }
 
 const settled = () => new Promise((resolve) => setImmediate(resolve));
@@ -77,7 +80,7 @@ test("reads only same-origin data and renders real schedule back-to-backs", asyn
   assert.doesNotMatch(html, /id="(?:today|filter|total|roadtotal|teamtotal|list|calbtn|listbtn)"/);
 });
 
-test("calendar shows all teams on busy days", async () => {
+test("busy days initially show four teams and can expand and collapse", async () => {
   const data = snapshot();
   const date = data.gameWeek[0].games[1].gameDate;
   const previous = data.gameWeek[0].games[0].gameDate;
@@ -90,10 +93,49 @@ test("calendar shows all teams on busy days", async () => {
   const app = createApp(data);
   await settled();
   const calendar = app.elements.get("calendar").innerHTML;
-  for (const team of ["NYR", "AAA", "BBB", "CCC", "DDD"]) {
+  for (const team of ["AAA", "BBB", "CCC", "DDD"]) {
     assert.match(calendar, new RegExp(`<b>${team}</b>`));
   }
-  assert.doesNotMatch(calendar, /\+\d+ more/);
+  assert.match(calendar, new RegExp(`<div id="extra-${date}" hidden>.*<b>NYR</b>`));
+  assert.match(calendar, /aria-expanded="false"/);
+  assert.match(calendar, />View 1 more<\/button>/);
+
+  const extra = { hidden: true };
+  app.dynamicElements.set(`extra-${date}`, extra);
+  const attributes = { "aria-controls": `extra-${date}`, "aria-expanded": "false" };
+  const button = {
+    dataset: { count: "1" },
+    getAttribute: (name) => attributes[name],
+    setAttribute: (name, value) => { attributes[name] = value; },
+    textContent: "",
+  };
+  const event = { target: { closest: () => button } };
+  app.elements.get("calendar").click(event);
+  assert.equal(extra.hidden, false);
+  assert.equal(attributes["aria-expanded"], "true");
+  assert.equal(button.textContent, "Show less");
+  app.elements.get("calendar").click(event);
+  assert.equal(extra.hidden, true);
+  assert.equal(attributes["aria-expanded"], "false");
+  assert.equal(button.textContent, "View 1 more");
+});
+
+test("calendar displays only the selected month's dates with weekday alignment", async () => {
+  const app = createApp(snapshot());
+  await settled();
+  for (const [year, month, dayCount, leading] of [
+    [2026, 1, 28, 0],
+    [2024, 1, 29, 4],
+    [2026, 7, 31, 6],
+  ]) {
+    vm.runInContext(`cursor = new Date(${year}, ${month}, 1); renderCalendar(monthDays());`, app.context);
+    const calendar = app.elements.get("calendar").innerHTML;
+    const dates = [...calendar.matchAll(/class="date"><span>(\d+)<\/span>/g)].map((match) => Number(match[1]));
+    assert.deepEqual(dates, Array.from({ length: dayCount }, (_, index) => index + 1));
+    const beforeFirstDate = calendar.split('class="date"')[0];
+    assert.equal((beforeFirstDate.match(/class="day empty-day"/g) || []).length, leading);
+    assert.doesNotMatch(calendar, /class="day outside/);
+  }
 });
 
 test("API publication failure remains visible in the calendar", async () => {
