@@ -162,6 +162,17 @@ body {
   color: #1b3246;
   font: bold 11px Arial, Helvetica, sans-serif;
 }
+.game-result {
+  margin-left: auto;
+  padding: 2px 4px;
+  border: 1px solid #aebac3;
+  background: #e4e9ed;
+  color: #243f55;
+  font: bold 10px Arial, Helvetica, sans-serif;
+}
+.game-result.win { border-color: #9ab7a2; background: #e7f2e9; color: #235a34; }
+.game-result.loss { border-color: #d3aaaa; background: #f9e9e9; color: #8c252b; }
+.game-result.ot-loss { border-color: #cbb79a; background: #f6f0e5; color: #76531e; }
 .game-matchup {
   color: #526170;
   font: 10px Arial, Helvetica, sans-serif;
@@ -381,6 +392,27 @@ function logoFor(row) {
     : "";
 }
 
+function resultFor(row) {
+  const game = row.game;
+  if (game.gameState !== "FINAL" && game.gameState !== "OFF") return null;
+
+  const isHome = game.homeTeam.abbrev === row.team;
+  const isAway = game.awayTeam.abbrev === row.team;
+  if (!isHome && !isAway) return null;
+  const score = (isHome ? game.homeTeam : game.awayTeam).score;
+  const opponentScore = (isHome ? game.awayTeam : game.homeTeam).score;
+  if (!Number.isInteger(score) || !Number.isInteger(opponentScore) || score < 0 ||
+      opponentScore < 0 || score === opponentScore) return null;
+  if (score > opponentScore) return { label: "W", description: "Win", className: "win" };
+
+  const period = game.gameOutcome?.lastPeriodType;
+  if (period === "OT" || period === "SO") {
+    return { label: "OTL", description: "Overtime or shootout loss", className: "ot-loss" };
+  }
+  if (period === "REG") return { label: "L", description: "Regulation loss", className: "loss" };
+  return null;
+}
+
 function rowsFor(date) {
   return (backToBack.get(dateKey(date)) || [])
     .slice()
@@ -406,8 +438,12 @@ function renderCalendar(days) {
       const road = isRoadToRoad(row);
       const logo = logoFor(row);
       const image = logo ? `<img class="team-logo" src="${escapeHtml(logo)}" alt="" loading="lazy">` : "";
+      const result = resultFor(row);
+      const resultBadge = result
+        ? `<span class="game-result ${result.className}" aria-label="${result.description}" title="${result.description}">${result.label}</span>`
+        : "";
       const matchup = `${row.previousVenue === "AWAY" ? "Away" : "Home"} → ${row.venue === "AWAY" ? "Away" : "Home"} · ${row.venue === "AWAY" ? "@" : "vs"} ${escapeHtml(row.opponent)}`;
-      return `<div class="game${road ? " road" : ""}" title="${escapeHtml(row.team)} is on the second night: ${row.previousVenue} → ${row.venue}"><div class="game-team">${image}<b>${escapeHtml(row.team)}</b></div><span class="game-matchup">${matchup}</span></div>`;
+      return `<div class="game${road ? " road" : ""}" title="${escapeHtml(row.team)} is on the second night: ${row.previousVenue} → ${row.venue}"><div class="game-team">${image}<b>${escapeHtml(row.team)}</b>${resultBadge}</div><span class="game-matchup">${matchup}</span></div>`;
     });
     const extraCount = rows.length - 4;
     const extra = extraCount > 0

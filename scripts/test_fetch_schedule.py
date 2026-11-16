@@ -12,6 +12,7 @@ class SnapshotTests(unittest.TestCase):
             "id": 1,
             "homeTeam": {"abbrev": "BOS", "logo": "https://assets.nhle.com/logos/nhl/svg/BOS_light.svg"},
             "awayTeam": {"abbrev": "NYR", "logo": "https://assets.nhle.com/logos/nhl/svg/NYR_light.svg"},
+            "gameOutcome": {"lastPeriodType": "OT"},
         }
 
         def fake_week(day):
@@ -27,6 +28,7 @@ class SnapshotTests(unittest.TestCase):
         self.assertGreater(max(requested), date(2027, 8, 1))
         self.assertEqual(len(snapshot["gameWeek"][0]["games"]), 1)
         self.assertIn("logo", snapshot["gameWeek"][0]["games"][0]["homeTeam"])
+        self.assertEqual(snapshot["gameWeek"][0]["games"][0]["gameOutcome"]["lastPeriodType"], "OT")
 
     def test_refuses_to_publish_empty_or_partial_download(self):
         with patch("fetch_schedule.fetch_week", return_value=[]):

@@ -81,6 +81,41 @@ test("reads only same-origin data and renders real schedule back-to-backs", asyn
   assert.doesNotMatch(html, /id="(?:today|filter|total|roadtotal|teamtotal|list|calbtn|listbtn)"/);
 });
 
+test("final results distinguish regulation, overtime and shootout losses", async () => {
+  const data = snapshot();
+  const game = data.gameWeek[0].games[1];
+  game.gameState = "OFF";
+  game.homeTeam.score = 3;
+  game.awayTeam.score = 2;
+  game.gameOutcome = { lastPeriodType: "OT" };
+  const app = createApp(data);
+  await settled();
+  assert.match(app.elements.get("calendar").innerHTML, /class="game-result ot-loss"[^>]*>OTL<\/span>/);
+
+  app.context.testGame = game;
+  const result = (team) => vm.runInContext(`resultFor({ game: testGame, team: "${team}" })?.label ?? null`, app.context);
+  assert.equal(result("NYR"), "OTL");
+  assert.equal(result("MTL"), "W");
+  game.gameOutcome.lastPeriodType = "SO";
+  assert.equal(result("NYR"), "OTL");
+  game.gameOutcome.lastPeriodType = "REG";
+  assert.equal(result("NYR"), "L");
+  game.gameState = "FINAL";
+  assert.equal(result("NYR"), "L");
+  game.gameState = "LIVE";
+  assert.equal(result("NYR"), null);
+  game.gameState = "FUT";
+  assert.equal(result("MTL"), null);
+  game.gameState = "FINAL";
+  delete game.gameOutcome;
+  assert.equal(result("NYR"), null);
+  assert.equal(result("MTL"), "W");
+  game.awayTeam.score = 3;
+  assert.equal(result("NYR"), null);
+  delete game.awayTeam.score;
+  assert.equal(result("MTL"), null);
+});
+
 test("busy days initially show four teams and can expand and collapse", async () => {
   const data = snapshot();
   const date = data.gameWeek[0].games[1].gameDate;

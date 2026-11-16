@@ -43,7 +43,7 @@ def build_snapshot(today):
                         raise ValueError(f"Missing team in NHL game on {day}")
                     games[game["id"]] = {
                         key: game[key]
-                        for key in ("id", "gameDate", "gameState", "startTimeUTC", "homeTeam", "awayTeam", "venue")
+                        for key in ("id", "gameDate", "gameState", "startTimeUTC", "homeTeam", "awayTeam", "venue", "gameOutcome")
                         if key in game
                     }
 

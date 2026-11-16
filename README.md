@@ -6,6 +6,8 @@ GitHub Actions downloads the current NHL season schedule server-side and publish
 
 The schedule refreshes on deployment and every six hours (scheduled runs can be delayed by GitHub). The page shows its last update time and warns when the data is over 24 hours old. Navigation covers July through June of the current season; unsupported months display an explicit message. No sample data is used.
 
+Finished games show W for a win, L for a regulation loss, or OTL for an overtime or shootout loss. A result is omitted when the NHL data is incomplete.
+
 ## Local preview
 
 Run `python3 scripts/fetch_schedule.py`, copy `index.html` and `favicon.svg` into `_site/`, then run `python3 -m http.server --directory _site 8000`. Open `http://localhost:8000`. Generating the snapshot requires access to the NHL API; viewing it does not.
