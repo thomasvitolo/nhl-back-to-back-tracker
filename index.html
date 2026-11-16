@@ -14,7 +14,7 @@
 <section class="bar"><div class="month-controls"><button class="iconbtn" id="prev" aria-label="Previous month">‹</button><strong id="month" aria-live="polite"></strong><button class="iconbtn" id="next" aria-label="Next month">›</button><button class="iconbtn" id="today" title="Go to today" style="width:auto;padding:0 10px;font-size:11px">Today</button></div><div class="controls"><select class="select" id="filter" aria-label="Filter games"><option value="all">All second nights</option><option value="road">Road → road only</option><option value="home">Includes home game</option></select><div class="seg" role="group" aria-label="Schedule view"><button id="calbtn" class="active" aria-pressed="true">Calendar</button><button id="listbtn" aria-pressed="false">List</button></div></div></section>
 <div class="legend"><span><i class="swatch"></i>Back-to-back</span><span><i class="swatch road"></i>Road → road</span><span>Each chip = one team on its second night</span></div><section class="calendar" id="calendar"></section><section class="list" id="list"></section><footer class="foot"><span>Back-to-back = consecutive NHL schedule dates. Red marks away games following an away game.</span><span>Schedule: NHL public API · Updates on load</span></footer></main>
 <script>
-const API = "https://api-web.nhle.com/v1/schedule/";
+const SCHEDULE_URL = "./data/schedule.json";
 const schedule = new Map();
 const backToBack = new Map();
 const $ = (id) => document.getElementById(id);
@@ -23,6 +23,8 @@ let cursor = new Date();
 cursor.setDate(1);
 let view = "calendar";
 let requestId = 0;
+let loadState = "loading";
+let loadError = "";
 
 function dateKey(date) {
   return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
@@ -46,10 +48,6 @@ function monthDays() {
   const first = new Date(cursor.getFullYear(), cursor.getMonth(), 1);
   const start = addDays(first, -first.getDay());
   return Array.from({ length: 42 }, (_, index) => addDays(start, index));
-}
-
-function mondayOf(date) {
-  return addDays(date, -((date.getDay() + 6) % 7));
 }
 
 function escapeHtml(value) {
@@ -96,57 +94,62 @@ async function loadAround() {
   const currentRequest = ++requestId;
   schedule.clear();
   backToBack.clear();
+  loadState = "loading";
   setStatus("LOADING NHL SCHEDULE", "loading");
   showLoading();
 
-  const days = monthDays();
-  const weekStarts = new Set(
-    [addDays(days[0], -1), ...days].map((date) => dateKey(mondayOf(date))),
-  );
-
   try {
-    const responses = await Promise.all([...weekStarts].map(async (weekStart) => {
-      const response = await fetch(`${API}${weekStart}`, { cache: "no-store" });
-      if (!response.ok) throw new Error(`The NHL schedule returned ${response.status}.`);
-      const data = await response.json();
-      if (!Array.isArray(data.gameWeek)) throw new Error("The NHL schedule response was incomplete.");
-      return data.gameWeek;
-    }));
+    const response = await fetch(SCHEDULE_URL, { cache: "no-store" });
+    if (!response.ok) throw new Error(`Published schedule returned ${response.status}.`);
+    const data = await response.json();
+    if (!Array.isArray(data.gameWeek) || !data.startDate || !data.endDate ||
+        !Number.isFinite(Date.parse(data.updatedAt))) {
+      throw new Error("The published NHL schedule was incomplete.");
+    }
 
     if (currentRequest !== requestId) return;
 
+    const selectedMonth = dateKey(cursor).slice(0, 7);
+    if (selectedMonth < data.startDate.slice(0, 7) ||
+        selectedMonth >= data.endDate.slice(0, 7)) {
+      throw new Error(`Schedule available from ${data.startDate.slice(0, 7)} through ${dateKey(addDays(parseDate(data.endDate), -1)).slice(0, 7)}.`);
+    }
+
     const seenGames = new Set();
-    for (const weeks of responses) {
-      for (const week of weeks) {
-        for (const game of week.games || []) {
-          const date = game.gameDate || week.date;
-          if (!date || !game.homeTeam?.abbrev || !game.awayTeam?.abbrev) continue;
+    for (const week of data.gameWeek) {
+      for (const game of week.games || []) {
+        const date = game.gameDate || week.date;
+        if (!date || !game.homeTeam?.abbrev || !game.awayTeam?.abbrev) continue;
 
-          const gameKey = game.id ?? `${date}-${game.awayTeam.abbrev}-${game.homeTeam.abbrev}`;
-          if (seenGames.has(gameKey)) continue;
-          seenGames.add(gameKey);
+        const gameKey = game.id ?? `${date}-${game.awayTeam.abbrev}-${game.homeTeam.abbrev}`;
+        if (seenGames.has(gameKey)) continue;
+        seenGames.add(gameKey);
 
-          const games = schedule.get(date) || [];
-          games.push({ ...game, date });
-          schedule.set(date, games);
-        }
+        const games = schedule.get(date) || [];
+        games.push({ ...game, date });
+        schedule.set(date, games);
       }
     }
 
     buildBackToBack();
+    loadState = "ready";
     render();
     const firstOfMonth = dateKey(new Date(cursor.getFullYear(), cursor.getMonth(), 1));
     const nextMonth = dateKey(new Date(cursor.getFullYear(), cursor.getMonth() + 1, 1));
     const gameCount = [...schedule.entries()]
       .filter(([date]) => date >= firstOfMonth && date < nextMonth)
       .reduce((count, [, games]) => count + games.length, 0);
-    setStatus(`SCHEDULE UPDATED · ${gameCount} GAMES THIS MONTH`);
+    const updated = new Date(data.updatedAt).toLocaleString();
+    const stale = Date.now() - Date.parse(data.updatedAt) > 24 * 60 * 60 * 1000;
+    setStatus(`${gameCount} GAMES · ${stale ? "DATA MAY BE OUTDATED · " : ""}UPDATED ${updated}`, stale ? "error" : "ready");
   } catch (error) {
     if (currentRequest !== requestId) return;
     schedule.clear();
     backToBack.clear();
+    loadState = "error";
+    loadError = error.message;
     render();
-    setStatus("SCHEDULE UNAVAILABLE · CHECK CONNECTION AND RELOAD", "error");
+    setStatus("SCHEDULE UNAVAILABLE", "error");
     console.error("Unable to load NHL schedule:", error);
   }
 }
@@ -253,6 +256,17 @@ function renderList(days) {
 }
 
 function render() {
+  if (loadState === "loading") {
+    showLoading();
+    return;
+  }
+  if (loadState === "error") {
+    showLoading();
+    const message = `<div class="empty error">${escapeHtml(loadError)} Try another month or reload.</div>`;
+    $("calendar").innerHTML = message;
+    $("list").innerHTML = message;
+    return;
+  }
   const days = monthDays();
   $("month").textContent = cursor.toLocaleString(undefined, {
     month: "long",
