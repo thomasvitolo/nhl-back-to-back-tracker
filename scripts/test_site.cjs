@@ -68,11 +68,11 @@ test("reads only same-origin data and renders real schedule back-to-backs", asyn
   assert.equal(app.elements.get("roadtotal").textContent, "1");
   assert.match(app.elements.get("calendar").innerHTML, /NYR/);
   assert.match(app.elements.get("calendar").innerHTML, /NYR_light\.svg/);
-  assert.match(app.elements.get("calendar").innerHTML, /class="b2b-tag">B2B/);
+  assert.doesNotMatch(app.elements.get("calendar").innerHTML, /b2b-tag|>B2B</);
   app.elements.get("listbtn").click();
   assert.equal(app.elements.get("list").style.display, "block");
-  assert.match(app.elements.get("list").innerHTML, /ON BACK-TO-BACK/);
   assert.match(app.elements.get("list").innerHTML, /NYR_light\.svg/);
+  assert.doesNotMatch(app.elements.get("list").innerHTML, /b2b-tag|ON BACK-TO-BACK/);
 });
 
 test("API publication failure remains an error after filtering or switching views", async () => {
