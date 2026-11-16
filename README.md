@@ -2,11 +2,11 @@
 
 See NHL teams playing the second game of a back-to-back all in one place.
 
-The static website reads the current schedule from the NHL's public schedule API and runs on GitHub Pages. Game times are displayed in the visitor's local timezone.
+The self-contained page includes an interactive sample preview and can switch to the live NHL schedule from the public schedule API.
 
 ## Local preview
 
-Open `index.html` in a browser. The schedule requires an internet connection and access to the NHL API.
+Open `index.html` in a browser. Click **Switch to live schedule** to load the NHL schedule; this requires an internet connection and access to the NHL API.
 
 ## Deployment
 
