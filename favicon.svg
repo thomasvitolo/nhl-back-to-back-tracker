@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <rect width="64" height="64" rx="5" fill="#163751"/>
+  <path d="M3 3h58v58H3z" fill="none" stroke="#90a5b5" stroke-width="2"/>
+  <path d="M4 54h56v6H4z" fill="#a32129"/>
+  <text x="32" y="41" text-anchor="middle" fill="#fff" font-family="Arial, Helvetica, sans-serif" font-size="24" font-weight="bold" letter-spacing="-2">B2B</text>
+</svg>

@@ -8,7 +8,7 @@ The schedule refreshes on deployment and every six hours (scheduled runs can be 
 
 ## Local preview
 
-Run `python3 scripts/fetch_schedule.py`, copy `index.html` into `_site/`, then run `python3 -m http.server --directory _site 8000`. Open `http://localhost:8000`. Generating the snapshot requires access to the NHL API; viewing it does not.
+Run `python3 scripts/fetch_schedule.py`, copy `index.html` and `favicon.svg` into `_site/`, then run `python3 -m http.server --directory _site 8000`. Open `http://localhost:8000`. Generating the snapshot requires access to the NHL API; viewing it does not.
 
 ## Deployment
 

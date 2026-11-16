@@ -30,7 +30,7 @@ jobs:
       - name: Fetch NHL schedule server-side
         run: python3 scripts/fetch_schedule.py
       - name: Prepare website
-        run: cp index.html _site/index.html
+        run: cp index.html favicon.svg _site/
       - name: Upload website
         uses: actions/upload-pages-artifact@v3
         with:
