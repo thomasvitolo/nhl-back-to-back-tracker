@@ -47,47 +47,59 @@ const settled = () => new Promise((resolve) => setImmediate(resolve));
 function snapshot() {
   const now = new Date();
   const year = now.getMonth() >= 6 ? now.getFullYear() : now.getFullYear() - 1;
-  const date = new Date(now.getFullYear(), now.getMonth(), 2);
   const dateKey = (value) => `${value.getFullYear()}-${String(value.getMonth() + 1).padStart(2, "0")}-${String(value.getDate()).padStart(2, "0")}`;
-  const game = (id, day, home) => ({
+  const game = (id, day, home, venue, score, state = "FINAL") => ({
     id,
     gameDate: dateKey(day),
-    homeTeam: { abbrev: home, logo: `https://assets.nhle.com/logos/nhl/svg/${home}_light.svg` },
-    awayTeam: { abbrev: "NYR", logo: "https://assets.nhle.com/logos/nhl/svg/NYR_light.svg" },
+    gameState: state,
+    venue: { default: venue },
+    homeTeam: { abbrev: home, score, logo: `https://assets.nhle.com/logos/nhl/svg/${home}_light.svg` },
+    awayTeam: { abbrev: "NYR", score: score + 1, logo: "https://assets.nhle.com/logos/nhl/svg/NYR_light.svg" },
   });
-  const yesterday = new Date(date);
-  yesterday.setDate(1);
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 12);
+  const yesterday = new Date(today);
+  yesterday.setDate(today.getDate() - 1);
+  const twoDaysAgo = new Date(today);
+  twoDaysAgo.setDate(today.getDate() - 2);
   return {
     updatedAt: now.toISOString(), startDate: `${year}-07-01`, endDate: `${year + 1}-07-01`,
-    gameWeek: [{ date: dateKey(date), games: [
-      game(1, yesterday, "BOS"), game(2, date, "MTL"),
-    ] }],
+    gameWeek: [
+      { date: dateKey(twoDaysAgo), games: [game(1, twoDaysAgo, "BOS", "Previous Arena", 2)] },
+      { date: dateKey(yesterday), games: [game(2, yesterday, "MTL", "Yesterday Arena", 3)] },
+      { date: dateKey(today), games: [game(3, today, "OTT", "Today's Arena", 4)] },
+    ],
+    yesterday: dateKey(yesterday),
   };
 }
 
-test("reads only same-origin data and renders real schedule back-to-backs", async () => {
-  const app = createApp(snapshot());
+test("daily view renders today's B2B scorecards and calendar opens historical dates", async () => {
+  const data = snapshot();
+  const app = createApp(data);
   await settled();
   assert.deepEqual(app.requests, ["./data/schedule.json"]);
-  assert.equal(app.elements.get("total").textContent, "1");
-  assert.equal(app.elements.get("roadtotal").textContent, "1");
-  assert.match(app.elements.get("calendar").innerHTML, /NYR/);
-  assert.match(app.elements.get("calendar").innerHTML, /NYR_light\.svg/);
-  assert.doesNotMatch(app.elements.get("calendar").innerHTML, /b2b-tag|>B2B</);
-  app.elements.get("listbtn").click();
-  assert.equal(app.elements.get("list").style.display, "block");
-  assert.match(app.elements.get("list").innerHTML, /NYR_light\.svg/);
-  assert.doesNotMatch(app.elements.get("list").innerHTML, /b2b-tag|ON BACK-TO-BACK/);
+  assert.equal(app.elements.get("daily").style.display, "block");
+  assert.match(app.elements.get("daily").innerHTML, /Today&#39;s Arena/);
+  assert.match(app.elements.get("daily").innerHTML, /NYR_light\.svg/);
+  assert.match(app.elements.get("daily").innerHTML, /class="score-number">5/);
+  assert.match(app.elements.get("daily").innerHTML, /class="score-team on-b2b"/);
+  assert.doesNotMatch(app.elements.get("daily").innerHTML, />B2B</);
+
+  app.elements.get("calbtn").click();
+  assert.equal(app.elements.get("calendar").style.display, "block");
+  app.elements.get("calendar").click({
+    target: { closest: () => ({ dataset: { date: data.yesterday } }) },
+  });
+  assert.equal(app.elements.get("daily").style.display, "block");
+  assert.match(app.elements.get("daily").innerHTML, /Yesterday Arena/);
+  assert.match(app.elements.get("daily").innerHTML, /Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday/);
 });
 
-test("API publication failure remains an error after filtering or switching views", async () => {
+test("schedule publication failure remains visible in daily and calendar views", async () => {
   const app = createApp(null, false);
   await settled();
-  app.elements.get("filter").change();
-  app.elements.get("listbtn").click();
-  assert.equal(app.elements.get("total").textContent, "—");
-  assert.match(app.elements.get("list").innerHTML, /503/);
-  assert.doesNotMatch(app.elements.get("list").innerHTML, /No second-night/);
+  assert.match(app.elements.get("daily").innerHTML, /503/);
+  app.elements.get("calbtn").click();
+  assert.match(app.elements.get("calendar").innerHTML, /503/);
 });
 
 test("unsupported months and old snapshots are explicitly reported", async () => {
@@ -98,6 +110,5 @@ test("unsupported months and old snapshots are explicitly reported", async () =>
   assert.match(app.elements.get("status").children.map((child) => child.textContent).join(""), /OUTDATED/);
   vm.runInContext('cursor = new Date(2000, 0, 1); loadAround();', app.context);
   await settled();
-  assert.match(app.elements.get("calendar").innerHTML, /Schedule available from/);
-  assert.equal(app.elements.get("total").textContent, "—");
+  assert.match(app.elements.get("daily").innerHTML, /Schedule available from/);
 });
