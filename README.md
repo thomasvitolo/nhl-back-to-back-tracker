@@ -10,4 +10,4 @@ Open `index.html` in a browser. The schedule requires an internet connection and
 
 ## Deployment
 
-The GitHub Actions workflow deploys the site to GitHub Pages whenever changes are pushed to `main`. Enable **Settings → Pages → Build and deployment → Source: GitHub Actions** if Pages is not already enabled.
+The GitHub Actions workflow enables and deploys GitHub Pages whenever changes are pushed to `main`.
