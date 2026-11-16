@@ -6,8 +6,9 @@ const { test } = require("node:test");
 const html = readFileSync("index.html", "utf8");
 const script = html.match(/<script>([\s\S]*?)<\/script>/)[1];
 assert.match(html, /<title>B2B — NHL Back-To-Back Tracker<\/title>/);
-assert.match(html, /class="brand-name">B2B/);
 assert.match(html, /<h1>NHL Back-To-Back Tracker<\/h1>/);
+assert.doesNotMatch(html, /<header class="top"/);
+assert.match(html, /<footer class="foot">[\s\S]*id="status"[\s\S]*<\/footer>/);
 assert.doesNotMatch(html, /ICE.?REST|Every second night, mapped by team/);
 
 function createApp(data, ok = true) {
