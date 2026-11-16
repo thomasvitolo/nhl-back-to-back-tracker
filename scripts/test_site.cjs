@@ -45,7 +45,10 @@ function snapshot() {
   const date = new Date(now.getFullYear(), now.getMonth(), 2);
   const dateKey = (value) => `${value.getFullYear()}-${String(value.getMonth() + 1).padStart(2, "0")}-${String(value.getDate()).padStart(2, "0")}`;
   const game = (id, day, home) => ({
-    id, gameDate: dateKey(day), homeTeam: { abbrev: home }, awayTeam: { abbrev: "NYR" },
+    id,
+    gameDate: dateKey(day),
+    homeTeam: { abbrev: home, logo: `https://assets.nhle.com/logos/nhl/svg/${home}_light.svg` },
+    awayTeam: { abbrev: "NYR", logo: "https://assets.nhle.com/logos/nhl/svg/NYR_light.svg" },
   });
   const yesterday = new Date(date);
   yesterday.setDate(1);
@@ -64,8 +67,12 @@ test("reads only same-origin data and renders real schedule back-to-backs", asyn
   assert.equal(app.elements.get("total").textContent, "1");
   assert.equal(app.elements.get("roadtotal").textContent, "1");
   assert.match(app.elements.get("calendar").innerHTML, /NYR/);
+  assert.match(app.elements.get("calendar").innerHTML, /NYR_light\.svg/);
+  assert.match(app.elements.get("calendar").innerHTML, /class="b2b-tag">B2B/);
   app.elements.get("listbtn").click();
   assert.equal(app.elements.get("list").style.display, "block");
+  assert.match(app.elements.get("list").innerHTML, /ON BACK-TO-BACK/);
+  assert.match(app.elements.get("list").innerHTML, /NYR_light\.svg/);
 });
 
 test("API publication failure remains an error after filtering or switching views", async () => {
