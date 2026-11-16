@@ -3,52 +3,86 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="theme-color" content="#0b1220">
-    <meta name="description" content="See which NHL teams are playing the second game of a back-to-back.">
+    <meta name="theme-color" content="#f5f6f7">
+    <meta name="description" content="See every NHL team playing the second game of a back-to-back, mapped by date and venue.">
     <title>NHL Back-to-Back Tracker</title>
     <link rel="preconnect" href="https://api-web.nhle.com">
     <link rel="stylesheet" href="styles.css">
     <script src="app.js" defer></script>
   </head>
   <body>
-    <header class="topbar">
-      <a class="brand" href="./" aria-label="NHL Back-to-Back Tracker home">
-        <span class="brand-mark" aria-hidden="true">B2B</span>
-        <span>HOCKEY<span class="brand-light"> / TRACKER</span></span>
-      </a>
-      <span class="season-label"><span class="live-dot" aria-hidden="true"></span> NHL SCHEDULE</span>
-    </header>
+    <main class="shell">
+      <header class="top">
+        <a class="brand" href="./" aria-label="Ice Rest home">
+          <span class="mark" aria-hidden="true">✳</span>
+          <span>ICE<span class="brand-divider">/</span><span class="brand-light">REST</span></span>
+        </a>
+        <div class="live" id="status" role="status" aria-live="polite">
+          <span class="spinner" aria-hidden="true"></span>
+          LOADING NHL SCHEDULE
+        </div>
+      </header>
 
-    <main>
-      <section class="intro" aria-labelledby="page-title">
-        <p class="eyebrow">THE DAILY NHL EDGE</p>
-        <h1 id="page-title">Back-to-back <span>watch.</span></h1>
-        <p class="intro-copy">Every team playing the second night of a back-to-back, all in one place.</p>
+      <section class="hero" aria-labelledby="page-title">
+        <div>
+          <p class="eyebrow">2026—27 SEASON · SCHEDULE INTELLIGENCE</p>
+          <h1 id="page-title">Back-to-back tracker</h1>
+          <p>Every second night, mapped by team. Spot the road grind at a glance.</p>
+        </div>
+        <div class="season">ALL TIMES · LOCAL DATE</div>
       </section>
 
-      <section class="tracker" aria-labelledby="schedule-title">
-        <div class="section-heading">
-          <div>
-            <p class="eyebrow">UP NEXT</p>
-            <h2 id="schedule-title">Second night schedule</h2>
+      <section class="stats" aria-label="Monthly back-to-back statistics">
+        <article class="stat">
+          <p class="stat-label">Second-night games</p>
+          <p class="stat-value" id="total">—</p>
+        </article>
+        <article class="stat">
+          <p class="stat-label">Road → road</p>
+          <p class="stat-value red" id="roadtotal">—</p>
+        </article>
+        <article class="stat">
+          <p class="stat-label">Teams on a B2B</p>
+          <p class="stat-value" id="teamtotal">—</p>
+        </article>
+      </section>
+
+      <section class="schedule" aria-label="Back-to-back schedule">
+        <div class="bar">
+          <div class="month-controls" aria-label="Choose month">
+            <button class="iconbtn" id="prev" type="button" aria-label="Previous month">‹</button>
+            <strong id="month" aria-live="polite"></strong>
+            <button class="iconbtn" id="next" type="button" aria-label="Next month">›</button>
+            <button class="iconbtn today-button" id="today" type="button">Today</button>
           </div>
-          <button class="refresh-button" id="refresh" type="button">
-            <span aria-hidden="true">↻</span> Refresh
-          </button>
+          <div class="controls">
+            <label class="visually-hidden" for="filter">Filter games</label>
+            <select class="select" id="filter">
+              <option value="all">All second nights</option>
+              <option value="road">Road → road only</option>
+              <option value="home">Includes home game</option>
+            </select>
+            <div class="seg" aria-label="Schedule view">
+              <button id="calbtn" class="active" type="button" aria-pressed="true">Calendar</button>
+              <button id="listbtn" type="button" aria-pressed="false">List</button>
+            </div>
+          </div>
         </div>
 
-        <div class="status-line" id="status" role="status" aria-live="polite">
-          <span class="loading-spinner" aria-hidden="true"></span>
-          Loading the NHL schedule…
+        <div class="legend" aria-label="Calendar legend">
+          <span><i class="swatch" aria-hidden="true"></i>Back-to-back</span>
+          <span><i class="swatch road" aria-hidden="true"></i>Road → road</span>
+          <span>Each chip = one team on its second night</span>
         </div>
-        <div class="schedule-list" id="schedule" aria-label="Upcoming back-to-back games"></div>
-        <p class="data-note">Schedule data provided by the NHL. Game times are shown in your local timezone.</p>
+
+        <div class="calendar" id="calendar" aria-label="Monthly calendar"></div>
+        <div class="list" id="list" aria-label="Back-to-back games by date"></div>
       </section>
-    </main>
 
-    <footer>
-      <span>BUILT FOR THE SECOND NIGHT.</span>
-      <span>NHL BACK-TO-BACK TRACKER</span>
-    </footer>
+      <footer class="foot">
+        <span>Back-to-back = consecutive NHL schedule dates. Red marks an away game following an away game.</span>
+        <span>Schedule: NHL public API · Updates on load</span>
+      </footer>
+    </main>
   </body>
 </html>
