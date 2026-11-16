@@ -1,0 +1,373 @@
+@import url("https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700;800&display=swap");
+
+:root {
+  color-scheme: dark;
+  font-family: "DM Sans", sans-serif;
+  background: #0b1220;
+  color: #f3f5fa;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  --muted: #8e9ab0;
+  --line: #202b3d;
+  --panel: #111b2b;
+  --accent: #ff6a3d;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  min-width: 320px;
+  min-height: 100vh;
+  margin: 0;
+  background:
+    radial-gradient(ellipse at 50% -20%, rgb(31 65 103 / 32%), transparent 58%),
+    #0b1220;
+}
+
+.topbar,
+footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 7.2%;
+}
+
+.topbar {
+  height: 74px;
+  border-bottom: 1px solid rgb(142 154 176 / 14%);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  color: inherit;
+  text-decoration: none;
+}
+
+.brand-mark {
+  display: grid;
+  width: 36px;
+  height: 32px;
+  place-items: center;
+  border: 1px solid var(--accent);
+  border-radius: 5px;
+  color: var(--accent);
+  font-family: "DM Mono", monospace;
+  font-size: 12px;
+  letter-spacing: -0.08em;
+}
+
+.brand-light {
+  color: #a7b2c5;
+  font-weight: 500;
+}
+
+.season-label,
+.eyebrow,
+footer,
+.game-date,
+.data-note {
+  font-family: "DM Mono", monospace;
+}
+
+.season-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  color: #a8b4c8;
+  font-size: 10px;
+  letter-spacing: 0.09em;
+}
+
+.live-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #69d6a5;
+  box-shadow: 0 0 10px rgb(105 214 165 / 55%);
+}
+
+main {
+  width: min(100% - 40px, 920px);
+  margin: 0 auto;
+}
+
+.intro {
+  padding: 87px 0 65px;
+  text-align: center;
+}
+
+.eyebrow {
+  margin: 0 0 15px;
+  color: var(--accent);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.17em;
+}
+
+h1 {
+  margin: 0;
+  font-size: clamp(42px, 7vw, 68px);
+  font-weight: 800;
+  letter-spacing: -0.065em;
+  line-height: 1.05;
+}
+
+h1 span {
+  color: var(--accent);
+}
+
+.intro-copy {
+  margin: 18px 0 0;
+  color: #a8b4c8;
+  font-size: 16px;
+}
+
+.tracker {
+  padding: 27px 30px 21px;
+  border: 1px solid #253247;
+  border-radius: 12px;
+  background: linear-gradient(145deg, rgb(20 31 48 / 96%), rgb(14 23 37 / 98%));
+  box-shadow: 0 24px 80px rgb(0 0 0 / 20%);
+}
+
+.section-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding-bottom: 23px;
+}
+
+.section-heading .eyebrow {
+  margin-bottom: 7px;
+  font-size: 9px;
+}
+
+h2 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+}
+
+.refresh-button {
+  display: inline-flex;
+  min-height: 36px;
+  align-items: center;
+  gap: 7px;
+  padding: 0 12px;
+  border: 1px solid #344158;
+  border-radius: 6px;
+  background: #172338;
+  color: #d7deea;
+  font: inherit;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.refresh-button:hover {
+  border-color: #63718a;
+  background: #1c2a42;
+}
+
+.refresh-button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.refresh-button span {
+  color: var(--accent);
+  font-size: 17px;
+  line-height: 1;
+}
+
+.status-line {
+  display: flex;
+  min-height: 68px;
+  align-items: center;
+  gap: 10px;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.status-line.is-error {
+  color: #ff9a7c;
+}
+
+.loading-spinner {
+  width: 15px;
+  height: 15px;
+  border: 2px solid #37465e;
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.schedule-list {
+  display: grid;
+  gap: 10px;
+}
+
+.game-card {
+  display: grid;
+  grid-template-columns: minmax(150px, 1fr) minmax(185px, 1.25fr) minmax(160px, 1fr);
+  align-items: center;
+  gap: 20px;
+  min-height: 100px;
+  padding: 17px 19px;
+  border: 1px solid #27344a;
+  border-radius: 8px;
+  background: rgb(9 17 29 / 54%);
+}
+
+.game-date {
+  color: #c1ccdc;
+  font-size: 10px;
+  letter-spacing: 0.035em;
+  line-height: 1.7;
+  text-transform: uppercase;
+}
+
+.game-date span {
+  display: block;
+  color: #8190a8;
+  font-size: 9px;
+}
+
+.matchup {
+  display: grid;
+  gap: 7px;
+}
+
+.team-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #d9e0eb;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.team-row img {
+  width: 21px;
+  height: 21px;
+  object-fit: contain;
+}
+
+.team-row .team-abbrev {
+  width: 33px;
+  color: #99a8bd;
+  font-family: "DM Mono", monospace;
+  font-size: 10px;
+}
+
+.team-badges {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 6px;
+}
+
+.b2b-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 9px;
+  border: 1px solid rgb(255 106 61 / 28%);
+  border-radius: 5px;
+  background: rgb(255 106 61 / 9%);
+  color: #ff9b7a;
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.b2b-badge::before {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  content: "";
+}
+
+.data-note {
+  margin: 18px 0 0;
+  color: #64728a;
+  font-size: 9px;
+  letter-spacing: 0.015em;
+}
+
+footer {
+  min-height: 80px;
+  margin-top: 58px;
+  border-top: 1px solid rgb(142 154 176 / 12%);
+  color: #66748c;
+  font-size: 9px;
+  letter-spacing: 0.1em;
+}
+
+@media (max-width: 680px) {
+  .topbar,
+  footer {
+    padding-right: 20px;
+    padding-left: 20px;
+  }
+
+  .intro {
+    padding: 65px 0 45px;
+  }
+
+  .intro-copy {
+    max-width: 300px;
+    margin-right: auto;
+    margin-left: auto;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  .tracker {
+    padding: 21px 16px 18px;
+  }
+
+  .game-card {
+    grid-template-columns: 1fr auto;
+    gap: 15px 10px;
+    padding: 15px;
+  }
+
+  .matchup {
+    grid-column: 1;
+    grid-row: 2;
+  }
+
+  .team-badges {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    max-width: 125px;
+  }
+
+  footer {
+    gap: 16px;
+    font-size: 8px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

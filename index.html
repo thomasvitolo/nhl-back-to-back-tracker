@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#0b1220">
+    <meta name="description" content="See which NHL teams are playing the second game of a back-to-back.">
+    <title>NHL Back-to-Back Tracker</title>
+    <link rel="preconnect" href="https://api-web.nhle.com">
+    <link rel="stylesheet" href="styles.css">
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="./" aria-label="NHL Back-to-Back Tracker home">
+        <span class="brand-mark" aria-hidden="true">B2B</span>
+        <span>HOCKEY<span class="brand-light"> / TRACKER</span></span>
+      </a>
+      <span class="season-label"><span class="live-dot" aria-hidden="true"></span> NHL SCHEDULE</span>
+    </header>
+
+    <main>
+      <section class="intro" aria-labelledby="page-title">
+        <p class="eyebrow">THE DAILY NHL EDGE</p>
+        <h1 id="page-title">Back-to-back <span>watch.</span></h1>
+        <p class="intro-copy">Every team playing the second night of a back-to-back, all in one place.</p>
+      </section>
+
+      <section class="tracker" aria-labelledby="schedule-title">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">UP NEXT</p>
+            <h2 id="schedule-title">Second night schedule</h2>
+          </div>
+          <button class="refresh-button" id="refresh" type="button">
+            <span aria-hidden="true">↻</span> Refresh
+          </button>
+        </div>
+
+        <div class="status-line" id="status" role="status" aria-live="polite">
+          <span class="loading-spinner" aria-hidden="true"></span>
+          Loading the NHL schedule…
+        </div>
+        <div class="schedule-list" id="schedule" aria-label="Upcoming back-to-back games"></div>
+        <p class="data-note">Schedule data provided by the NHL. Game times are shown in your local timezone.</p>
+      </section>
+    </main>
+
+    <footer>
+      <span>BUILT FOR THE SECOND NIGHT.</span>
+      <span>NHL BACK-TO-BACK TRACKER</span>
+    </footer>
+  </body>
+</html>
