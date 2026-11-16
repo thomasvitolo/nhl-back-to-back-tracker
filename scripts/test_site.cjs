@@ -26,6 +26,7 @@ function createApp(data, ok = true) {
   const context = {
     document: {
       getElementById(id) {
+        assert.match(html, new RegExp(`id="${id}"`), `Unknown element: ${id}`);
         if (!elements.has(id)) elements.set(id, element());
         return elements.get(id);
       },
@@ -69,25 +70,37 @@ test("reads only same-origin data and renders real schedule back-to-backs", asyn
   const app = createApp(snapshot());
   await settled();
   assert.deepEqual(app.requests, ["./data/schedule.json"]);
-  assert.equal(app.elements.get("total").textContent, "1");
-  assert.equal(app.elements.get("roadtotal").textContent, "1");
   assert.match(app.elements.get("calendar").innerHTML, /NYR/);
   assert.match(app.elements.get("calendar").innerHTML, /NYR_light\.svg/);
+  assert.match(app.elements.get("calendar").innerHTML, /class="game road"/);
   assert.doesNotMatch(app.elements.get("calendar").innerHTML, /b2b-tag|>B2B</);
-  app.elements.get("listbtn").click();
-  assert.equal(app.elements.get("list").style.display, "block");
-  assert.match(app.elements.get("list").innerHTML, /NYR_light\.svg/);
-  assert.doesNotMatch(app.elements.get("list").innerHTML, /b2b-tag|ON BACK-TO-BACK/);
+  assert.doesNotMatch(html, /id="(?:today|filter|total|roadtotal|teamtotal|list|calbtn|listbtn)"/);
 });
 
-test("API publication failure remains an error after filtering or switching views", async () => {
+test("calendar shows all teams on busy days", async () => {
+  const data = snapshot();
+  const date = data.gameWeek[0].games[1].gameDate;
+  const previous = data.gameWeek[0].games[0].gameDate;
+  for (const [index, team] of ["AAA", "BBB", "CCC", "DDD"].entries()) {
+    data.gameWeek[0].games.push(
+      { id: 10 + index * 2, gameDate: previous, homeTeam: { abbrev: `H${index}` }, awayTeam: { abbrev: team } },
+      { id: 11 + index * 2, gameDate: date, homeTeam: { abbrev: `X${index}` }, awayTeam: { abbrev: team } },
+    );
+  }
+  const app = createApp(data);
+  await settled();
+  const calendar = app.elements.get("calendar").innerHTML;
+  for (const team of ["NYR", "AAA", "BBB", "CCC", "DDD"]) {
+    assert.match(calendar, new RegExp(`<b>${team}</b>`));
+  }
+  assert.doesNotMatch(calendar, /\+\d+ more/);
+});
+
+test("API publication failure remains visible in the calendar", async () => {
   const app = createApp(null, false);
   await settled();
-  app.elements.get("filter").change();
-  app.elements.get("listbtn").click();
-  assert.equal(app.elements.get("total").textContent, "—");
-  assert.match(app.elements.get("list").innerHTML, /503/);
-  assert.doesNotMatch(app.elements.get("list").innerHTML, /No second-night/);
+  assert.match(app.elements.get("calendar").innerHTML, /503/);
+  assert.doesNotMatch(app.elements.get("calendar").innerHTML, /No second-night/);
 });
 
 test("unsupported months and old snapshots are explicitly reported", async () => {
@@ -99,5 +112,4 @@ test("unsupported months and old snapshots are explicitly reported", async () =>
   vm.runInContext('cursor = new Date(2000, 0, 1); loadAround();', app.context);
   await settled();
   assert.match(app.elements.get("calendar").innerHTML, /Schedule available from/);
-  assert.equal(app.elements.get("total").textContent, "—");
 });

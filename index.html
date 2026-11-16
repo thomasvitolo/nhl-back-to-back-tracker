@@ -10,9 +10,8 @@
 </style></head>
 <body><main class="shell"><header class="top"><a class="brand" href="./" aria-label="B2B home"><span class="mark" aria-hidden="true"><svg viewBox="0 0 34 34" focusable="false"><path d="M7 23.5 24.5 6M10 28 28 10M5 19l10 10M19 5l10 10" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2.4"/><circle cx="17" cy="17" r="3.3" fill="#ffb25b"/></svg></span><span class="brand-name">B2B</span></a><div class="live" id="status" role="status" aria-live="polite"><span class="spinner" aria-hidden="true"></span> LOADING NHL SCHEDULE</div></header>
 <section class="hero"><div><div class="eyebrow">2026—27 season · schedule intelligence</div><h1>NHL Back-To-Back Tracker</h1></div><div class="season">ALL TIMES · LOCAL DATE</div></section>
-<section class="stats"><div class="stat"><div class="stat-label">Second-night games</div><div class="stat-value" id="total">—</div></div><div class="stat"><div class="stat-label">Road → road</div><div class="stat-value red" id="roadtotal">—</div></div><div class="stat"><div class="stat-label">Teams on a B2B</div><div class="stat-value" id="teamtotal">—</div></div></section>
-<section class="bar"><div class="month-controls"><button class="iconbtn" id="prev" aria-label="Previous month">‹</button><strong id="month" aria-live="polite"></strong><button class="iconbtn" id="next" aria-label="Next month">›</button><button class="iconbtn" id="today" title="Go to today" style="width:auto;padding:0 10px;font-size:11px">Today</button></div><div class="controls"><select class="select" id="filter" aria-label="Filter games"><option value="all">All second nights</option><option value="road">Road → road only</option><option value="home">Includes home game</option></select><div class="seg" role="group" aria-label="Schedule view"><button id="calbtn" class="active" aria-pressed="true">Calendar</button><button id="listbtn" aria-pressed="false">List</button></div></div></section>
-<div class="legend"><span><i class="swatch"></i>Back-to-back</span><span><i class="swatch road"></i>Road → road</span><span>Each chip = one team on its second night</span></div><section class="calendar" id="calendar"></section><section class="list" id="list"></section><footer class="foot"><span>Back-to-back = consecutive NHL schedule dates. Red marks away games following an away game.</span><span>Schedule: NHL public API · Updates on load</span></footer></main>
+<section class="bar"><div class="month-controls"><button class="iconbtn" id="prev" aria-label="Previous month">‹</button><strong id="month" aria-live="polite"></strong><button class="iconbtn" id="next" aria-label="Next month">›</button></div></section>
+<div class="legend"><span><i class="swatch"></i>Back-to-back</span><span><i class="swatch road"></i>Road → road</span><span>Each chip = one team on its second night</span></div><section class="calendar" id="calendar"></section><footer class="foot"><span>Back-to-back = consecutive NHL schedule dates. Red marks away games following an away game.</span><span>Schedule: NHL public API · Updates on load</span></footer></main>
 <script>
 const SCHEDULE_URL = "./data/schedule.json";
 const schedule = new Map();
@@ -21,7 +20,6 @@ const $ = (id) => document.getElementById(id);
 
 let cursor = new Date();
 cursor.setDate(1);
-let view = "calendar";
 let requestId = 0;
 let loadState = "loading";
 let loadError = "";
@@ -80,14 +78,8 @@ function showLoading() {
     month: "long",
     year: "numeric",
   });
-  $("total").textContent = "—";
-  $("roadtotal").textContent = "—";
-  $("teamtotal").textContent = "—";
   const loading = '<div class="empty"><span class="spinner"></span> Loading NHL schedule…</div>';
   $("calendar").innerHTML = loading;
-  $("list").innerHTML = loading;
-  $("calendar").style.display = view === "calendar" ? "block" : "none";
-  $("list").style.display = view === "list" ? "block" : "none";
 }
 
 async function loadAround() {
@@ -203,15 +195,9 @@ function logoFor(row) {
     : "";
 }
 
-function filtered(date) {
-  const rows = backToBack.get(dateKey(date)) || [];
-  const filter = $("filter").value;
-  return rows
-    .filter((row) => {
-      if (filter === "road") return isRoadToRoad(row);
-      if (filter === "home") return !isRoadToRoad(row);
-      return true;
-    })
+function rowsFor(date) {
+  return (backToBack.get(dateKey(date)) || [])
+    .slice()
     .sort((a, b) => a.team.localeCompare(b.team));
 }
 
@@ -222,51 +208,23 @@ function renderCalendar(days) {
   const today = dateKey(new Date());
   const cells = days.map((date) => {
     const key = dateKey(date);
-    const rows = filtered(date);
+    const rows = rowsFor(date);
     const classes = [
       "day",
       date.getMonth() !== cursor.getMonth() ? "outside" : "",
       key === today ? "today" : "",
     ].filter(Boolean).join(" ");
-    const chips = rows.slice(0, 4).map((row) => {
+    const chips = rows.map((row) => {
       const road = isRoadToRoad(row);
       const logo = logoFor(row);
       const image = logo ? `<img class="team-logo" src="${escapeHtml(logo)}" alt="" loading="lazy">` : "";
       const matchup = `${row.previousVenue === "AWAY" ? "Away" : "Home"} → ${row.venue === "AWAY" ? "Away" : "Home"} · ${row.venue === "AWAY" ? "@" : "vs"} ${escapeHtml(row.opponent)}`;
       return `<div class="game${road ? " road" : ""}" title="${escapeHtml(row.team)} is on the second night: ${row.previousVenue} → ${row.venue}"><div class="game-team">${image}<b>${escapeHtml(row.team)}</b></div><span class="game-matchup">${matchup}</span></div>`;
     }).join("");
-    const more = rows.length > 4 ? `<div class="more">+${rows.length - 4} more</div>` : "";
-    return `<div class="${classes}"><div class="date"><span>${date.getDate()}</span>${key === today ? '<span class="todaytag">TODAY</span>' : ""}</div>${chips}${more}</div>`;
+    return `<div class="${classes}"><div class="date"><span>${date.getDate()}</span>${key === today ? '<span class="todaytag">TODAY</span>' : ""}</div>${chips}</div>`;
   }).join("");
 
   $("calendar").innerHTML = `<div class="weekdays">${weekdays}</div><div class="grid">${cells}</div>`;
-}
-
-function renderList(days) {
-  const activeDays = days.filter((date) =>
-    date.getMonth() === cursor.getMonth() && filtered(date).length);
-
-  if (!activeDays.length) {
-    $("list").innerHTML = '<div class="empty">No second-night games match this view.</div>';
-    return;
-  }
-
-  $("list").innerHTML = activeDays.map((date) => {
-    const heading = date.toLocaleDateString(undefined, {
-      weekday: "long",
-      month: "long",
-      day: "numeric",
-    });
-    const rows = filtered(date).map((row) => {
-      const road = isRoadToRoad(row);
-      const previousVenue = row.previousVenue;
-      const venue = row.game.venue?.default || "NHL venue";
-      const logo = logoFor(row);
-      const image = logo ? `<img class="team-logo" src="${escapeHtml(logo)}" alt="" loading="lazy">` : "";
-      return `<div class="game-row"><div class="away">${previousVenue}<br>↓ ${row.venue}</div><div><div class="teams">${image}<strong>${escapeHtml(row.team)} ${row.venue === "AWAY" ? "@" : "vs"} ${escapeHtml(row.opponent)}</strong></div><div class="venue">${escapeHtml(venue)} · second game in as many days</div></div><span class="badge${road ? " road" : ""}">${road ? "ROAD → ROAD" : "BACK-TO-BACK"}</span></div>`;
-    }).join("");
-    return `<div class="listday"><div class="listhead">${heading}</div>${rows}</div>`;
-  }).join("");
 }
 
 function render() {
@@ -278,7 +236,6 @@ function render() {
     showLoading();
     const message = `<div class="empty error">${escapeHtml(loadError)} Try another month or reload.</div>`;
     $("calendar").innerHTML = message;
-    $("list").innerHTML = message;
     return;
   }
   const days = monthDays();
@@ -287,16 +244,6 @@ function render() {
     year: "numeric",
   });
   renderCalendar(days);
-  renderList(days);
-
-  const monthRows = days
-    .filter((date) => date.getMonth() === cursor.getMonth())
-    .flatMap(filtered);
-  $("total").textContent = String(monthRows.length);
-  $("roadtotal").textContent = String(monthRows.filter(isRoadToRoad).length);
-  $("teamtotal").textContent = String(new Set(monthRows.map((row) => row.team)).size);
-  $("calendar").style.display = view === "calendar" ? "block" : "none";
-  $("list").style.display = view === "list" ? "block" : "none";
 }
 
 $("prev").addEventListener("click", () => {
@@ -307,28 +254,5 @@ $("next").addEventListener("click", () => {
   cursor.setMonth(cursor.getMonth() + 1);
   loadAround();
 });
-$("today").addEventListener("click", () => {
-  cursor = new Date();
-  cursor.setDate(1);
-  loadAround();
-});
-$("filter").addEventListener("change", render);
-$("calbtn").addEventListener("click", () => {
-  view = "calendar";
-  $("calbtn").classList.add("active");
-  $("listbtn").classList.remove("active");
-  $("calbtn").setAttribute("aria-pressed", "true");
-  $("listbtn").setAttribute("aria-pressed", "false");
-  render();
-});
-$("listbtn").addEventListener("click", () => {
-  view = "list";
-  $("listbtn").classList.add("active");
-  $("calbtn").classList.remove("active");
-  $("listbtn").setAttribute("aria-pressed", "true");
-  $("calbtn").setAttribute("aria-pressed", "false");
-  render();
-});
-
 loadAround();
 </script></body></html>
