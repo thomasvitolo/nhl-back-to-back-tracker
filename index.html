@@ -8,19 +8,299 @@
 :root{--ink:#15191f;--muted:#77808b;--line:#e8eaed;--paper:#f5f6f7;--blue:#184d83;--red:#c63232;--redwash:#fff0ef;--green:#15704f}*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:14px 'DM Sans',sans-serif}.shell{max-width:1440px;margin:auto;padding:30px 38px 54px}.top{display:flex;align-items:center;justify-content:space-between;margin-bottom:30px}.brand{display:flex;align-items:center;gap:12px;font-weight:800;letter-spacing:-.04em;font-size:17px}.mark{width:34px;height:34px;background:#132c44;color:white;border-radius:9px;display:grid;place-items:center;font-size:16px}.live{font:11px 'DM Mono',monospace;color:var(--green);display:flex;align-items:center;gap:8px}.live:before{content:'';width:7px;height:7px;border-radius:50%;background:#31a578;box-shadow:0 0 0 3px #d9f2e8}.hero{display:flex;justify-content:space-between;align-items:end;margin-bottom:24px}.eyebrow{font:11px 'DM Mono',monospace;text-transform:uppercase;letter-spacing:.13em;color:var(--blue);margin-bottom:9px}.hero h1{font-size:clamp(30px,4vw,45px);letter-spacing:-.055em;line-height:1;margin:0 0 10px;font-weight:700}.hero p{color:var(--muted);margin:0;font-size:14px}.season{font:11px 'DM Mono',monospace;color:var(--muted);padding-bottom:5px}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:22px}.stat{padding:16px 18px;background:#fff;border:1px solid var(--line);border-radius:10px}.stat-label{color:var(--muted);font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase}.stat-value{font-size:27px;font-weight:700;letter-spacing:-.05em;margin:6px 0 0}.stat-value.red{color:var(--red)}.bar{display:flex;align-items:center;justify-content:space-between;background:#fff;border:1px solid var(--line);border-bottom:0;border-radius:11px 11px 0 0;padding:14px 17px}.month-controls{display:flex;align-items:center;gap:13px}.month-controls strong{font-size:16px;min-width:145px;text-align:center;letter-spacing:-.03em}.iconbtn{border:1px solid var(--line);background:white;color:var(--ink);height:32px;width:32px;border-radius:7px;cursor:pointer;font-size:18px}.iconbtn:hover,.seg button:hover{background:#f3f5f7}.controls{display:flex;gap:10px;align-items:center}.select,.seg{height:34px;border:1px solid var(--line);border-radius:7px;background:white;font:12px 'DM Sans',sans-serif;color:#454d57;padding:0 10px}.seg{display:flex;padding:3px}.seg button{border:0;background:transparent;padding:0 11px;border-radius:5px;font:600 12px 'DM Sans',sans-serif;color:var(--muted);cursor:pointer}.seg button.active{background:#152b40;color:white}.legend{background:white;border-left:1px solid var(--line);border-right:1px solid var(--line);padding:0 17px 12px;display:flex;gap:18px;color:var(--muted);font-size:11px}.legend span{display:flex;align-items:center;gap:6px}.swatch{height:9px;width:9px;border-radius:3px;background:#dcebf6}.swatch.road{background:#d94b4b}.calendar{background:white;border:1px solid var(--line);border-top:0;border-radius:0 0 11px 11px;overflow:hidden}.weekdays,.grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr))}.weekday{padding:9px 10px;font:10px 'DM Mono',monospace;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}.day{min-height:111px;padding:8px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);overflow:hidden}.day:nth-child(7n){border-right:0}.day.outside{background:#fafafa;color:#b7bdc4}.day.today{background:#f3f8fc}.date{font:11px 'DM Mono',monospace;color:#626c77;margin-bottom:7px;display:flex;justify-content:space-between}.todaytag{font-size:9px;color:var(--blue)}.game{display:flex;align-items:center;gap:5px;font-size:10px;line-height:1.2;padding:4px 5px;margin:3px 0;border-radius:5px;background:#f0f5f9;color:#29435a;white-space:nowrap;overflow:hidden}.game.road{background:var(--redwash);color:#a52c2c;font-weight:700}.game b{font:500 9px 'DM Mono',monospace;color:#77808b;flex:none}.game.road b{color:#c63232}.more{font:10px 'DM Mono',monospace;color:var(--muted);padding:4px}.list{display:none;background:#fff;border:1px solid var(--line);border-top:0;border-radius:0 0 11px 11px;overflow:hidden}.listday{border-bottom:1px solid var(--line)}.listhead{background:#f9fafb;padding:11px 17px;font:11px 'DM Mono',monospace;color:#525c67;letter-spacing:.02em}.game-row{display:grid;grid-template-columns:82px minmax(0,1fr) 125px;align-items:center;padding:12px 17px;border-top:1px solid #f0f1f3;gap:12px}.teams{font-weight:600;font-size:13px}.venue{font-size:11px;color:var(--muted);margin-top:3px}.badge{font:10px 'DM Mono',monospace;justify-self:end;padding:5px 8px;border-radius:5px;background:#edf4f9;color:#36546e}.badge.road{background:#ffe4e2;color:#b42c2c;font-weight:500}.away{font:10px 'DM Mono',monospace;color:#89919a;text-align:right}.empty{padding:52px 20px;text-align:center;color:var(--muted)}.foot{display:flex;justify-content:space-between;gap:20px;color:#8a929b;font-size:10px;margin-top:13px}.error{color:var(--red)}.spinner{display:inline-block;width:10px;height:10px;border:1.5px solid #ccd1d6;border-top-color:var(--blue);border-radius:50%;animation:spin .7s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}
 @media(max-width:750px){.shell{padding:20px 12px}.top{margin-bottom:22px}.hero{align-items:start;display:block}.season{margin-top:12px}.stats{gap:7px}.stat{padding:12px}.stat-value{font-size:22px}.bar{align-items:flex-start;gap:12px;flex-direction:column}.controls{width:100%;justify-content:space-between}.calendar{overflow:auto}.weekdays,.grid{min-width:700px}.day{min-height:94px;padding:6px}.game{font-size:9px}.game-row{grid-template-columns:63px 1fr 90px;padding:10px}.foot{display:block}.foot span{display:block;margin-bottom:5px}}
 </style></head>
-<body><main class="shell"><header class="top"><div class="brand"><div class="mark">✳</div>ICE<span style="font-weight:500;color:#79828c">/</span>REST</div><div class="live" id="status"><span class="spinner"></span> LOADING NHL SCHEDULE</div></header>
+<body><main class="shell"><header class="top"><div class="brand"><div class="mark">✳</div>ICE<span style="font-weight:500;color:#79828c">/</span>REST</div><div class="live" id="status" role="status" aria-live="polite"><span class="spinner" aria-hidden="true"></span> LOADING NHL SCHEDULE</div></header>
 <section class="hero"><div><div class="eyebrow">2026—27 season · schedule intelligence</div><h1>Back-to-back tracker</h1><p>Every second night, mapped by team. Spot the road grind at a glance.</p></div><div class="season">ALL TIMES · LOCAL DATE</div></section>
 <section class="stats"><div class="stat"><div class="stat-label">Second-night games</div><div class="stat-value" id="total">—</div></div><div class="stat"><div class="stat-label">Road → road</div><div class="stat-value red" id="roadtotal">—</div></div><div class="stat"><div class="stat-label">Teams on a B2B</div><div class="stat-value" id="teamtotal">—</div></div></section>
-<section class="bar"><div class="month-controls"><button class="iconbtn" id="prev" aria-label="Previous month">‹</button><strong id="month"></strong><button class="iconbtn" id="next" aria-label="Next month">›</button><button class="iconbtn" id="today" title="Go to today" style="width:auto;padding:0 10px;font-size:11px">Today</button></div><div class="controls"><select class="select" id="filter"><option value="all">All second nights</option><option value="road">Road → road only</option><option value="home">Includes home game</option></select><button class="select" id="modebtn">Switch to live schedule</button><div class="seg"><button id="calbtn" class="active">Calendar</button><button id="listbtn">List</button></div></div></section>
+<section class="bar"><div class="month-controls"><button class="iconbtn" id="prev" aria-label="Previous month">‹</button><strong id="month" aria-live="polite"></strong><button class="iconbtn" id="next" aria-label="Next month">›</button><button class="iconbtn" id="today" title="Go to today" style="width:auto;padding:0 10px;font-size:11px">Today</button></div><div class="controls"><select class="select" id="filter" aria-label="Filter games"><option value="all">All second nights</option><option value="road">Road → road only</option><option value="home">Includes home game</option></select><div class="seg" role="group" aria-label="Schedule view"><button id="calbtn" class="active" aria-pressed="true">Calendar</button><button id="listbtn" aria-pressed="false">List</button></div></div></section>
 <div class="legend"><span><i class="swatch"></i>Back-to-back</span><span><i class="swatch road"></i>Road → road</span><span>Each chip = one team on its second night</span></div><section class="calendar" id="calendar"></section><section class="list" id="list"></section><footer class="foot"><span>Back-to-back = consecutive NHL schedule dates. Red marks away games following an away game.</span><span>Schedule: NHL public API · Updates on load</span></footer></main>
 <script>
-const API='https://api-web.nhle.com/v1/schedule/';let cursor=new Date();cursor.setDate(1);let schedule=new Map(),loading=new Set(),view='calendar',demo=true;const $=id=>document.getElementById(id);const key=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;const parseDate=s=>new Date(s+'T12:00:00');const cap=s=>s||'—';
-function shiftDate(n){const d=new Date();d.setDate(d.getDate()+n);return key(d)}
-function seedSchedule(){schedule.clear();const add=(offset,home,away)=>{const date=shiftDate(offset),g={gameDate:date,homeTeam:{abbrev:home},awayTeam:{abbrev:away},venue:{default:'Sample Arena'}};schedule.set(date,[...(schedule.get(date)||[]),g])};add(-1,'BOS','NYR');add(0,'MTL','NYR');add(-1,'TOR','OTT');add(0,'BUF','TOR');add(-1,'CAR','WSH');add(0,'CAR','NJD');add(0,'EDM','VAN');add(1,'CGY','EDM');add(1,'SEA','LAK');add(2,'LAK','SJS');buildBackToBack()}
-function monthDays(){const first=new Date(cursor.getFullYear(),cursor.getMonth(),1),start=new Date(first);start.setDate(1-first.getDay());return Array.from({length:42},(_,i)=>{const d=new Date(start);d.setDate(start.getDate()+i);return d})}
-async function loadAround(){if(demo){render();return}schedule.clear();const dates=monthDays();const weeks=new Set(dates.map(d=>{const monday=new Date(d);monday.setDate(d.getDate()-((d.getDay()+6)%7));return key(monday)}));const need=[...weeks].filter(k=>!loading.has(k));need.forEach(x=>loading.add(x));$('status').innerHTML='<span class="spinner"></span> LOADING NHL SCHEDULE';await Promise.all(need.map(async date=>{try{const res=await fetch(API+date);if(!res.ok)throw Error('Schedule unavailable');const data=await res.json();for(const w of data.gameWeek||[])for(const g of w.games||[]){const gd=g.gameDate||w.date;(schedule.get(gd)||schedule.set(gd,[]).get(gd)).push(g)}}catch(e){console.error(e)}finally{loading.delete(date)}}));buildBackToBack();render();$('status').textContent=schedule.size?'SCHEDULE UPDATED':'SCHEDULE UNAVAILABLE';$('status').classList.toggle('error',!schedule.size)}
-let b2b=new Map();function buildBackToBack(){b2b.clear();const all=[...schedule.entries()].sort(([a],[b])=>a.localeCompare(b));const prevByTeam=new Map();for(const [date,games] of all){for(const g of games){const home=g.homeTeam?.abbrev,away=g.awayTeam?.abbrev;for(const [team,venue,opponent] of [[home,'HOME',away],[away,'AWAY',home]]){const prev=prevByTeam.get(team);if(prev){const diff=(parseDate(date)-parseDate(prev.date))/86400000;if(diff===1){const row={date,team,venue,opponent,prevVenue:prev.venue,game:g};(b2b.get(date)||b2b.set(date,[]).get(date)).push(row)}}prevByTeam.set(team,{date,venue})}}}}
-function filtered(date){const arr=b2b.get(key(date))||[];const f=$('filter').value;return arr.filter(x=>f==='all'||f==='road'&&(x.venue==='AWAY'&&x.prevVenue==='AWAY')||f==='home'&&!(x.venue==='AWAY'&&x.prevVenue==='AWAY')).sort((a,b)=>a.team.localeCompare(b.team))}
-function render(){const days=monthDays(),m=cursor.toLocaleString('en-US',{month:'long',year:'numeric'});$('month').textContent=m;const today=key(new Date());const weekday='<div class="weekdays">'+['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].map(x=>`<div class="weekday">${x}</div>`).join('')+'</div>';$('calendar').innerHTML=weekday+'<div class="grid">'+days.map(d=>{const rows=filtered(d),other=d.getMonth()!==cursor.getMonth();return `<div class="day ${other?'outside':''} ${key(d)===today?'today':''}"><div class="date"><span>${d.getDate()}</span>${key(d)===today?'<span class="todaytag">TODAY</span>':''}</div>${rows.slice(0,4).map(x=>`<div class="game ${x.venue==='AWAY'&&x.prevVenue==='AWAY'?'road':''}" title="${x.team}: ${x.prevVenue} → ${x.venue}"><b>${x.team}</b><span>${x.prevVenue==='AWAY'?'@':'vs'} ${x.opponent}</span></div>`).join('')}${rows.length>4?`<div class="more">+${rows.length-4} more</div>`:''}</div>`}).join('')+'</div>';let dates=days.filter(d=>d.getMonth()===cursor.getMonth()&&filtered(d).length);$('list').innerHTML=dates.length?dates.map(d=>`<div class="listday"><div class="listhead">${d.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'})}</div>${filtered(d).map(x=>{let g=x.game,road=x.venue==='AWAY'&&x.prevVenue==='AWAY';return `<div class="game-row"><div class="away">${x.prevVenue==='AWAY'?'AWAY':'HOME'}<br>↓ ${x.venue}</div><div><div class="teams">${x.team} ${x.venue==='AWAY'?'@':'vs'} ${x.opponent}</div><div class="venue">${g.venue?.default||'NHL venue'} · second game in as many days</div></div><span class="badge ${road?'road':''}">${road?'ROAD → ROAD':'BACK-TO-BACK'}</span></div>`}).join('')}</div>`).join(''):'<div class="empty">No second-night games match this view.</div>';const monthB2B=days.filter(d=>d.getMonth()===cursor.getMonth()).flatMap(filtered);$('total').textContent=monthB2B.length;$('roadtotal').textContent=monthB2B.filter(x=>x.venue==='AWAY'&&x.prevVenue==='AWAY').length;$('teamtotal').textContent=new Set(monthB2B.map(x=>x.team)).size;$('calendar').style.display=view==='calendar'?'block':'none';$('list').style.display=view==='list'?'block':'none'}
-$('prev').onclick=()=>{cursor.setMonth(cursor.getMonth()-1);loadAround()};$('next').onclick=()=>{cursor.setMonth(cursor.getMonth()+1);loadAround()};$('today').onclick=()=>{cursor=new Date();cursor.setDate(1);loadAround()};$('filter').onchange=render;$('modebtn').onclick=()=>{demo=!demo;schedule.clear();if(demo){seedSchedule();$('modebtn').textContent='Switch to live schedule';$('status').textContent='SAMPLE DATA · INTERACTIVE PREVIEW';$('status').classList.remove('error');render()}else{$('modebtn').textContent='Switch to sample data';loadAround()}};$('calbtn').onclick=()=>{view='calendar';$('calbtn').classList.add('active');$('listbtn').classList.remove('active');render()};$('listbtn').onclick=()=>{view='list';$('listbtn').classList.add('active');$('calbtn').classList.remove('active');render()};seedSchedule();$('modebtn').textContent='Switch to live schedule';$('status').textContent='SAMPLE DATA · INTERACTIVE PREVIEW';render();
+const API = "https://api-web.nhle.com/v1/schedule/";
+const schedule = new Map();
+const backToBack = new Map();
+const $ = (id) => document.getElementById(id);
+
+let cursor = new Date();
+cursor.setDate(1);
+let view = "calendar";
+let requestId = 0;
+
+function dateKey(date) {
+  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
+}
+
+function parseDate(value) {
+  return new Date(`${value}T12:00:00`);
+}
+
+function addDays(date, amount) {
+  const result = new Date(date);
+  result.setDate(result.getDate() + amount);
+  return result;
+}
+
+function nextDate(value) {
+  return dateKey(addDays(parseDate(value), 1));
+}
+
+function monthDays() {
+  const first = new Date(cursor.getFullYear(), cursor.getMonth(), 1);
+  const start = addDays(first, -first.getDay());
+  return Array.from({ length: 42 }, (_, index) => addDays(start, index));
+}
+
+function mondayOf(date) {
+  return addDays(date, -((date.getDay() + 6) % 7));
+}
+
+function escapeHtml(value) {
+  return String(value).replace(/[&<>"']/g, (character) => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#39;",
+  })[character]);
+}
+
+function setStatus(message, state = "ready") {
+  const status = $("status");
+  status.classList.toggle("error", state === "error");
+  status.replaceChildren();
+
+  if (state === "loading") {
+    const spinner = document.createElement("span");
+    spinner.className = "spinner";
+    spinner.setAttribute("aria-hidden", "true");
+    status.append(spinner);
+  }
+
+  status.append(document.createTextNode(message));
+}
+
+function showLoading() {
+  $("month").textContent = cursor.toLocaleString(undefined, {
+    month: "long",
+    year: "numeric",
+  });
+  $("total").textContent = "—";
+  $("roadtotal").textContent = "—";
+  $("teamtotal").textContent = "—";
+  const loading = '<div class="empty"><span class="spinner"></span> Loading NHL schedule…</div>';
+  $("calendar").innerHTML = loading;
+  $("list").innerHTML = loading;
+  $("calendar").style.display = view === "calendar" ? "block" : "none";
+  $("list").style.display = view === "list" ? "block" : "none";
+}
+
+async function loadAround() {
+  const currentRequest = ++requestId;
+  schedule.clear();
+  backToBack.clear();
+  setStatus("LOADING NHL SCHEDULE", "loading");
+  showLoading();
+
+  const days = monthDays();
+  const weekStarts = new Set(
+    [addDays(days[0], -1), ...days].map((date) => dateKey(mondayOf(date))),
+  );
+
+  try {
+    const responses = await Promise.all([...weekStarts].map(async (weekStart) => {
+      const response = await fetch(`${API}${weekStart}`, { cache: "no-store" });
+      if (!response.ok) throw new Error(`The NHL schedule returned ${response.status}.`);
+      const data = await response.json();
+      if (!Array.isArray(data.gameWeek)) throw new Error("The NHL schedule response was incomplete.");
+      return data.gameWeek;
+    }));
+
+    if (currentRequest !== requestId) return;
+
+    const seenGames = new Set();
+    for (const weeks of responses) {
+      for (const week of weeks) {
+        for (const game of week.games || []) {
+          const date = game.gameDate || week.date;
+          if (!date || !game.homeTeam?.abbrev || !game.awayTeam?.abbrev) continue;
+
+          const gameKey = game.id ?? `${date}-${game.awayTeam.abbrev}-${game.homeTeam.abbrev}`;
+          if (seenGames.has(gameKey)) continue;
+          seenGames.add(gameKey);
+
+          const games = schedule.get(date) || [];
+          games.push({ ...game, date });
+          schedule.set(date, games);
+        }
+      }
+    }
+
+    buildBackToBack();
+    render();
+    const firstOfMonth = dateKey(new Date(cursor.getFullYear(), cursor.getMonth(), 1));
+    const nextMonth = dateKey(new Date(cursor.getFullYear(), cursor.getMonth() + 1, 1));
+    const gameCount = [...schedule.entries()]
+      .filter(([date]) => date >= firstOfMonth && date < nextMonth)
+      .reduce((count, [, games]) => count + games.length, 0);
+    setStatus(`SCHEDULE UPDATED · ${gameCount} GAMES THIS MONTH`);
+  } catch (error) {
+    if (currentRequest !== requestId) return;
+    schedule.clear();
+    backToBack.clear();
+    render();
+    setStatus("SCHEDULE UNAVAILABLE · CHECK CONNECTION AND RELOAD", "error");
+    console.error("Unable to load NHL schedule:", error);
+  }
+}
+
+function buildBackToBack() {
+  backToBack.clear();
+  const previousByTeam = new Map();
+
+  for (const date of [...schedule.keys()].sort()) {
+    const games = schedule.get(date).slice().sort((a, b) =>
+      (a.startTimeUTC || "").localeCompare(b.startTimeUTC || ""));
+
+    for (const game of games) {
+      if (game.gameState === "PPD" || game.gameState === "CANC") continue;
+      const home = game.homeTeam.abbrev;
+      const away = game.awayTeam.abbrev;
+
+      for (const [team, venue, opponent] of [
+        [home, "HOME", away],
+        [away, "AWAY", home],
+      ]) {
+        const previous = previousByTeam.get(team);
+        if (previous && nextDate(previous.date) === date) {
+          const rows = backToBack.get(date) || [];
+          rows.push({
+            date,
+            team,
+            venue,
+            opponent,
+            previousVenue: previous.venue,
+            game,
+          });
+          backToBack.set(date, rows);
+        }
+        previousByTeam.set(team, { date, venue });
+      }
+    }
+  }
+}
+
+function isRoadToRoad(row) {
+  return row.venue === "AWAY" && row.previousVenue === "AWAY";
+}
+
+function filtered(date) {
+  const rows = backToBack.get(dateKey(date)) || [];
+  const filter = $("filter").value;
+  return rows
+    .filter((row) => {
+      if (filter === "road") return isRoadToRoad(row);
+      if (filter === "home") return !isRoadToRoad(row);
+      return true;
+    })
+    .sort((a, b) => a.team.localeCompare(b.team));
+}
+
+function renderCalendar(days) {
+  const weekdays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
+    .map((day) => `<div class="weekday">${day}</div>`)
+    .join("");
+  const today = dateKey(new Date());
+  const cells = days.map((date) => {
+    const key = dateKey(date);
+    const rows = filtered(date);
+    const classes = [
+      "day",
+      date.getMonth() !== cursor.getMonth() ? "outside" : "",
+      key === today ? "today" : "",
+    ].filter(Boolean).join(" ");
+    const chips = rows.slice(0, 4).map((row) => {
+      const road = isRoadToRoad(row);
+      return `<div class="game${road ? " road" : ""}" title="${escapeHtml(row.team)}: ${row.previousVenue} → ${row.venue}"><b>${escapeHtml(row.team)}</b><span>${row.venue === "AWAY" ? "@" : "vs"} ${escapeHtml(row.opponent)}</span></div>`;
+    }).join("");
+    const more = rows.length > 4 ? `<div class="more">+${rows.length - 4} more</div>` : "";
+    return `<div class="${classes}"><div class="date"><span>${date.getDate()}</span>${key === today ? '<span class="todaytag">TODAY</span>' : ""}</div>${chips}${more}</div>`;
+  }).join("");
+
+  $("calendar").innerHTML = `<div class="weekdays">${weekdays}</div><div class="grid">${cells}</div>`;
+}
+
+function renderList(days) {
+  const activeDays = days.filter((date) =>
+    date.getMonth() === cursor.getMonth() && filtered(date).length);
+
+  if (!activeDays.length) {
+    $("list").innerHTML = '<div class="empty">No second-night games match this view.</div>';
+    return;
+  }
+
+  $("list").innerHTML = activeDays.map((date) => {
+    const heading = date.toLocaleDateString(undefined, {
+      weekday: "long",
+      month: "long",
+      day: "numeric",
+    });
+    const rows = filtered(date).map((row) => {
+      const road = isRoadToRoad(row);
+      const previousVenue = row.previousVenue;
+      const venue = row.game.venue?.default || "NHL venue";
+      return `<div class="game-row"><div class="away">${previousVenue}<br>↓ ${row.venue}</div><div><div class="teams">${escapeHtml(row.team)} ${row.venue === "AWAY" ? "@" : "vs"} ${escapeHtml(row.opponent)}</div><div class="venue">${escapeHtml(venue)} · second game in as many days</div></div><span class="badge${road ? " road" : ""}">${road ? "ROAD → ROAD" : "BACK-TO-BACK"}</span></div>`;
+    }).join("");
+    return `<div class="listday"><div class="listhead">${heading}</div>${rows}</div>`;
+  }).join("");
+}
+
+function render() {
+  const days = monthDays();
+  $("month").textContent = cursor.toLocaleString(undefined, {
+    month: "long",
+    year: "numeric",
+  });
+  renderCalendar(days);
+  renderList(days);
+
+  const monthRows = days
+    .filter((date) => date.getMonth() === cursor.getMonth())
+    .flatMap(filtered);
+  $("total").textContent = String(monthRows.length);
+  $("roadtotal").textContent = String(monthRows.filter(isRoadToRoad).length);
+  $("teamtotal").textContent = String(new Set(monthRows.map((row) => row.team)).size);
+  $("calendar").style.display = view === "calendar" ? "block" : "none";
+  $("list").style.display = view === "list" ? "block" : "none";
+}
+
+$("prev").addEventListener("click", () => {
+  cursor.setMonth(cursor.getMonth() - 1);
+  loadAround();
+});
+$("next").addEventListener("click", () => {
+  cursor.setMonth(cursor.getMonth() + 1);
+  loadAround();
+});
+$("today").addEventListener("click", () => {
+  cursor = new Date();
+  cursor.setDate(1);
+  loadAround();
+});
+$("filter").addEventListener("change", render);
+$("calbtn").addEventListener("click", () => {
+  view = "calendar";
+  $("calbtn").classList.add("active");
+  $("listbtn").classList.remove("active");
+  $("calbtn").setAttribute("aria-pressed", "true");
+  $("listbtn").setAttribute("aria-pressed", "false");
+  render();
+});
+$("listbtn").addEventListener("click", () => {
+  view = "list";
+  $("listbtn").classList.add("active");
+  $("calbtn").classList.remove("active");
+  $("listbtn").setAttribute("aria-pressed", "true");
+  $("calbtn").setAttribute("aria-pressed", "false");
+  render();
+});
+
+loadAround();
 </script></body></html>
